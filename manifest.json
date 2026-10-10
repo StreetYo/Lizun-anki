@@ -1,0 +1,137 @@
+{
+  "id": "lizun.anki",
+  "name": "Anki",
+  "version": "1.0.0",
+  "author": "Lizun",
+  "description": "Review flash cards in the island: your Anki decks or decks kept in the widget",
+  "entry": "index.html",
+  "width": 340,
+  "permissions": ["storage"],
+  "network": ["http://127.0.0.1:8765"],
+  "apps": [
+    {
+      "id": "anki",
+      "name": "Anki",
+      "paths": ["%LOCALAPPDATA%\\Programs\\Anki\\anki.exe", "%PROGRAMFILES%\\Anki\\anki.exe"]
+    }
+  ],
+  "settings": [
+    {
+      "key": "source",
+      "type": "select",
+      "label": "Cards from",
+      "description": "Anki needs the AnkiConnect add-on and Anki running. Decks in the widget work without Anki but do not sync with AnkiWeb.",
+      "default": "anki",
+      "options": [
+        { "value": "anki", "label": "Anki on this computer" },
+        { "value": "local", "label": "Decks in the widget" }
+      ]
+    },
+    {
+      "key": "textSize",
+      "type": "number",
+      "label": "Card text size",
+      "default": 16,
+      "min": 11,
+      "max": 28,
+      "unit": "px"
+    },
+    {
+      "key": "showIntervals",
+      "type": "toggle",
+      "label": "Show next review time on the buttons",
+      "default": true
+    },
+    {
+      "key": "startAnki",
+      "type": "toggle",
+      "label": "Start Anki in the background",
+      "description": "Anki on this computer only. Lizun starts Anki without a window when it starts, so the cards are ready; Open Anki in the widget shows it.",
+      "default": true
+    },
+    {
+      "key": "syncWhenDone",
+      "type": "toggle",
+      "label": "Sync with AnkiWeb after a deck is done",
+      "description": "Anki on this computer only. Anki asks you to sign in to AnkiWeb the first time.",
+      "default": true
+    },
+    {
+      "key": "apiKey",
+      "type": "text",
+      "label": "AnkiConnect API key",
+      "description": "Only if you set apiKey in AnkiConnect's config.",
+      "default": "",
+      "maxLength": 200,
+      "placeholder": "Not set"
+    },
+    {
+      "key": "newPerDay",
+      "type": "number",
+      "label": "New cards a day",
+      "description": "Decks in the widget only, for each deck. Anki uses each deck's own options.",
+      "default": 20,
+      "min": 0,
+      "max": 9999
+    },
+    {
+      "key": "reviewsPerDay",
+      "type": "number",
+      "label": "Reviews a day",
+      "description": "Decks in the widget only, for each deck.",
+      "default": 200,
+      "min": 0,
+      "max": 9999
+    },
+    {
+      "key": "retention",
+      "type": "number",
+      "label": "Desired retention",
+      "description": "Decks in the widget only. Higher means more reviews and fewer forgotten cards.",
+      "default": 90,
+      "min": 70,
+      "max": 99,
+      "unit": "%"
+    }
+  ],
+  "locales": {
+    "ru": {
+      "name": "Anki",
+      "description": "Повторение карточек в острове: ваши колоды Anki или колоды в самом виджете",
+      "settings": {
+        "source": {
+          "label": "Карточки из",
+          "description": "Для Anki нужен аддон AnkiConnect и запущенный Anki. Колоды в виджете работают без Anki, но не синхронизируются с AnkiWeb.",
+          "options": { "anki": "Anki на этом компьютере", "local": "Колоды в виджете" }
+        },
+        "textSize": { "label": "Размер текста карточки", "unit": "пкс" },
+        "showIntervals": { "label": "Показывать время следующего повторения на кнопках" },
+        "startAnki": {
+          "label": "Запускать Anki в фоне",
+          "description": "Только для Anki на этом компьютере. Lizun запускает Anki без окна при старте, и карточки сразу готовы; «Открыть Anki» в виджете покажет его."
+        },
+        "syncWhenDone": {
+          "label": "Синхронизировать с AnkiWeb, когда колода пройдена",
+          "description": "Только для Anki на этом компьютере. В первый раз Anki попросит войти в AnkiWeb."
+        },
+        "apiKey": {
+          "label": "API-ключ AnkiConnect",
+          "description": "Только если вы задали apiKey в настройках AnkiConnect.",
+          "placeholder": "Не задан"
+        },
+        "newPerDay": {
+          "label": "Новых карточек в день",
+          "description": "Только для колод в виджете, для каждой колоды. Anki берёт настройки самой колоды."
+        },
+        "reviewsPerDay": {
+          "label": "Повторений в день",
+          "description": "Только для колод в виджете, для каждой колоды."
+        },
+        "retention": {
+          "label": "Желаемое запоминание",
+          "description": "Только для колод в виджете. Выше — больше повторений и меньше забытых карточек."
+        }
+      }
+    }
+  }
+}
