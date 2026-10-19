@@ -27,6 +27,7 @@ export const TEXTS = {
     syncing: 'Anki is syncing with AnkiWeb.',
     offlineTitle: 'Anki is not reachable',
     openAnki: 'Open Anki',
+    hideAnki: 'Put Anki in the background',
     starting: 'Starting Anki…',
     notInstalled: 'Anki is not installed on this computer. Get it at apps.ankiweb.net.',
     offlineText:
@@ -90,6 +91,7 @@ export const TEXTS = {
     syncing: 'Anki синхронизируется с AnkiWeb.',
     offlineTitle: 'Anki недоступен',
     openAnki: 'Открыть Anki',
+    hideAnki: 'Убрать Anki в фон',
     starting: 'Запускаю Anki…',
     notInstalled: 'Anki не установлен на этом компьютере. Скачать: apps.ankiweb.net.',
     offlineText:

@@ -23,6 +23,7 @@ const ICONS = {
   edit: '<path d="M4 20h4L19 9l-4-4L4 16v4zM13 7l4 4"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  background: '<path d="M11 7v6h6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
 };
 
 const app = document.getElementById('app');
@@ -53,6 +54,8 @@ const state = {
   toast: '',
   /** The form or question shown in place of the deck or the card. */
   form: null,
+  /** Whether Anki's window is shown; then the button puts it back in the background. */
+  ankiShown: false,
 };
 /** What the card view shows now, so drawing again does not reset it. */
 let shownCard = '';
@@ -121,7 +124,12 @@ function renderDecks() {
   const local = source.kind === 'local';
   const tools = local
     ? [iconButton('import', text.importCards, () => openImport()), iconButton('plus', text.newDeck, () => openDeckForm())]
-    : [iconButton('open', text.openAnki, () => run(openAnki)), iconButton('sync', text.sync, () => run(syncAnki))];
+    : [
+        state.ankiShown
+          ? iconButton('background', text.hideAnki, () => run(hideAnki))
+          : iconButton('open', text.openAnki, () => run(openAnki)),
+        iconButton('sync', text.sync, () => run(syncAnki)),
+      ];
   const list = h(
     'ul',
     { class: 'deck-list' },
@@ -566,8 +574,14 @@ async function start(launch = false) {
     await connectAnki(launch);
   }
   state.decks = await source.decks();
+  await readAnkiShown();
   state.view = 'decks';
   lastRefresh = Date.now();
+}
+
+/** Whether Anki's window is shown now; a Lizun without `apps.state` answers no. */
+async function readAnkiShown() {
+  state.ankiShown = source.kind === 'anki' && (await apps.state('anki').catch(() => null)) === 'shown';
 }
 
 async function connectAnki(launch) {
@@ -614,6 +628,13 @@ async function openAnki() {
     state.decks = await source.decks();
     state.view = 'decks';
   }
+  await readAnkiShown();
+}
+
+/** Puts Anki back in the background: no window, no taskbar button; its shortcut brings it back. */
+async function hideAnki() {
+  await apps.hide('anki');
+  await readAnkiShown();
 }
 
 async function openDeck(deckId) {
@@ -693,12 +714,14 @@ async function catchUp() {
   if (state.busy || !source || Date.now() - lastRefresh < REFRESH_INTERVAL) return;
   lastRefresh = Date.now();
   const view = state.view;
-  const before = JSON.stringify([state.decks, state.card?.id]);
+  const before = JSON.stringify([state.decks, state.card?.id, state.ankiShown]);
   try {
     if (view === 'decks') {
       const decks = await source.decks();
+      const shown = source.kind === 'anki' && (await apps.state('anki').catch(() => null)) === 'shown';
       if (state.busy || state.view !== view) return;
       state.decks = decks;
+      state.ankiShown = shown;
     } else if (view === 'study' && source.kind === 'anki') {
       const card = await source.current();
       if (state.busy || state.view !== view || card?.id === state.card?.id) return;
@@ -713,7 +736,7 @@ async function catchUp() {
     if (!state.busy && (error instanceof AnkiOffline || error instanceof AnkiKeyNeeded)) run(() => Promise.reject(error));
     return;
   }
-  if (JSON.stringify([state.decks, state.card?.id]) !== before) render();
+  if (JSON.stringify([state.decks, state.card?.id, state.ankiShown]) !== before) render();
 }
 
 document.documentElement.addEventListener('pointerenter', () => void catchUp());

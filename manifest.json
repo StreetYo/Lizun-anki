@@ -46,7 +46,7 @@
       "key": "startAnki",
       "type": "toggle",
       "label": "Start Anki in the background",
-      "description": "Anki on this computer only. Lizun starts Anki without a window when it starts, so the cards are ready; Open Anki in the widget shows it.",
+      "description": "Anki on this computer only. Lizun starts Anki without a window when it starts, so the cards are ready. The button in the widget opens Anki and puts it back; its shortcut opens it too.",
       "default": true
     },
     {
@@ -108,7 +108,7 @@
         "showIntervals": { "label": "Показывать время следующего повторения на кнопках" },
         "startAnki": {
           "label": "Запускать Anki в фоне",
-          "description": "Только для Anki на этом компьютере. Lizun запускает Anki без окна при старте, и карточки сразу готовы; «Открыть Anki» в виджете покажет его."
+          "description": "Только для Anki на этом компьютере. Lizun запускает Anki без окна при старте, и карточки сразу готовы. Кнопка в виджете открывает Anki и убирает обратно в фон; ярлык Anki тоже его откроет."
         },
         "syncWhenDone": {
           "label": "Синхронизировать с AnkiWeb, когда колода пройдена",

@@ -78,8 +78,18 @@ export class AnkiConnectSource {
   /** Decks in Anki's order, parents before children, with today's counts. */
   async decks() {
     const ids = await this.call('deckNamesAndIds');
-    const names = Object.keys(ids).sort(compareDeckNames);
-    const stats = await this.call('getDeckStats', { decks: names });
+    let names = Object.keys(ids).sort(compareDeckNames);
+    let stats;
+    try {
+      stats = await this.call('getDeckStats', { decks: names });
+    } catch (error) {
+      // Newer AnkiConnect takes the counts from Anki's deck list and fails on a deck missing
+      // there: the Default deck, which Anki hides while it is empty. Then it stays hidden here too.
+      const shown = names.filter((name) => ids[name] !== 1);
+      if (shown.length === names.length) throw error;
+      stats = await this.call('getDeckStats', { decks: shown });
+      names = shown;
+    }
     this.deckNames = new Map(names.map((name) => [String(ids[name]), name]));
     const decks = names.map((name) => {
       const stat = stats[ids[name]] ?? {};
@@ -96,7 +106,7 @@ export class AnkiConnectSource {
       };
     });
     // Anki hides the Default deck (id 1, named in the user's language) while it is empty and has
-    // no subdecks.
+    // no subdecks; older AnkiConnect counts it anyway.
     return decks.filter(
       (deck) => !(deck.id === '1' && deck.total === 0 && !names.some((n) => n.startsWith(`${deck.name}::`))),
     );

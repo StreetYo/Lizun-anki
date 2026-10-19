@@ -34,9 +34,10 @@ taskbar button, and the cards are there when you open the island. Anki syncs wit
 it starts, as usual. If Anki is already open, the widget uses it as it is.
 
 - **Open Anki** (the arrow in the deck list) shows Anki's window, for signing in to AnkiWeb,
-  adding cards or anything else. Opening Anki from its own shortcut works too.
-- When you quit Lizun, an Anki it started and you never opened is closed the usual way, so it
-  syncs and does not keep running unseen. An Anki you opened stays open.
+  adding cards or anything else. Opening Anki from its own shortcut works too. While Anki's
+  window is open, the same button puts it back in the background.
+- When you quit Lizun, an Anki still in the background is closed the usual way, so it syncs and
+  does not keep running unseen. An Anki you opened stays open.
 - If you close Anki yourself, the widget leaves it closed until you press Try again or Open
   Anki.
 - To start Anki yourself instead, turn off "Start Anki in the background" in the settings.
